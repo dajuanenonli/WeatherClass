@@ -5,7 +5,11 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
+<<<<<<< Updated upstream
 	<string>09EDC4CD-14AD-4895-A6F2-BD0FE879C053</string>
+=======
+	<string>A7016365-A42D-4246-A7B4-01C7212E24F8</string>
+>>>>>>> Stashed changes
 	<key>IDESourceControlProjectName</key>
 	<string>WeatherClass</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
