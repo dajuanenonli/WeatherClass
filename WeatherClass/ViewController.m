@@ -8,8 +8,10 @@
 
 #import "ViewController.h"
 #import "AFNetworking.h"
+#import "CurrentCondition.h"
+#import "WeatherData.h"
 
-static NSString * const BaseURLString = @"http://www.vikingcomputerconsulting.com/weather_sample/";
+
 //http://www.vikingcomputerconsulting.com/weather_sample/weather.php?format=json
 
 @interface ViewController ()
@@ -17,47 +19,19 @@ static NSString * const BaseURLString = @"http://www.vikingcomputerconsulting.co
 @property (nonatomic, strong) NSDictionary *weather;
 @property (nonatomic, strong) NSDictionary *currentCondition;
 @property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, retain) CurrentCondition *todaysCondition;
+@property (nonatomic, retain) WeatherData *weatherData;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-   // Do any additional setup after loading the view, typically from a nib.
-    
-    // 1
-    NSString *string = [NSString stringWithFormat:@"%@weather.php?format=json", BaseURLString];
-    NSURL *url = [NSURL URLWithString:string];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    // 2
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // 3
-        self.weather = (NSDictionary *)responseObject;
-        self.data = [self.weather objectForKey:@"data"];
-    
-        self.currentCondition = [[self.data objectForKey:@"current_condition"] objectAtIndex:0];
-        
-        self.title = @"JSON Retrieved";
-        [self.tableView reloadData];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        // 4
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
-                                                            message:[error localizedDescription]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    // 5
-    [operation start];
+   [super viewDidLoad];
+   
+    self.weatherData = [[WeatherData alloc] init];
+    [self.weatherData fetch];
+    //self.weatherData.currentCondition
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,9 +58,7 @@ static NSString * const BaseURLString = @"http://www.vikingcomputerconsulting.co
     {
         cell = [[UITableViewCell alloc]
                 initWithStyle:UITableViewCellStyleDefault
-                reuseIdentifier:SimpleTableIdentifier];
-        
-    
+                reuseIdentifier:SimpleTableIdentifier];        
     }
     if(self.currentCondition != nil)
     {
