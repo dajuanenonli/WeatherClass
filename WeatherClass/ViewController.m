@@ -15,7 +15,7 @@ static NSString * const BaseURLString = @"http://www.vikingcomputerconsulting.co
 @interface ViewController ()
 
 @property (nonatomic, strong) NSDictionary *weather;
-@property (nonatomic, strong) NSMutableDictionary *currentCondition;
+@property (nonatomic, strong) NSDictionary *currentCondition;
 @property (nonatomic, strong) NSDictionary *data;
 @end
 
@@ -94,12 +94,28 @@ static NSString * const BaseURLString = @"http://www.vikingcomputerconsulting.co
         
         NSString *key = [keyArray objectAtIndex:indexPath.row];
         
-        //NSDictionary *myDict = [self.currentCondition objectForKey:key];
-        //NSLog((NSString *)[self.currentCondition valueForKey:key]);
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", key, [self.currentCondition valueForKey:key]];
+        if([[self.currentCondition valueForKey:key] isKindOfClass:[NSString class]])
+        {
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", key, [self.currentCondition valueForKey:key]];        }
+        else
+        {
+            //if value is array, loop through the value
+            NSArray *arrayValue = [self.currentCondition valueForKey:key];
+            NSMutableString *concatenatedString = [NSMutableString string];
+            for (int i = 0; i<arrayValue.count; i++) {
+                [concatenatedString appendString:[[arrayValue objectAtIndex:i] valueForKey:@"value"]];
+                if(i + 1 < arrayValue.count)
+                {
+                    [concatenatedString appendString:@", "];
+                }
+            }
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", key, concatenatedString];
+
+        }
+        
+        
     }
     
-    //cell.textLabel.text = @"RAlph";//[myDict objectForKey:@"key"];
 
     return cell;
 }
